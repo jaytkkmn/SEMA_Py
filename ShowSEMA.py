@@ -13,7 +13,7 @@ def MQTT_pub(payload):
 
 
 def getinfo():
-    result = check_output(["./semaeapi_tool", "-a", "SemaEApiBoardGetStringA", "2"]).decode("utf-8")
+    result = check_output(["./semaeapi_tool", "-a", "SemaEApiBoardGetStringA", "1"]).decode("utf-8")
 
     return result
 
@@ -22,4 +22,3 @@ def getinfo():
 payload = getinfo()
 MQTT_pub(payload)
 
-print()
