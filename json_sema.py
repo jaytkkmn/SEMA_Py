@@ -3,11 +3,13 @@ import json, time
 import paho.mqtt.publish as publish
 from subprocess import check_output
 
-def MQTT_pub(topic, payload):
+
+def mqtt_pub(topic, payload):
     ''' Use MQTT to publish the data '''
 
     host = "localhost"
     publish.single(topic, payload, qos=1, hostname=host)
+
 
 def get_info(semadata):
     '''Get information by SEMAEApi and use subprocess->check_output to capture result'''
@@ -23,6 +25,7 @@ def get_info(semadata):
 
 
 def get_realtime_info(semadata):
+    '''Get information by SEMAEApi and use subprocess->check_output to capture result'''
 
     semadata['CPU_Temp'] = check_output(["./semaeapi_tool", "-a", "SemaEApiBoardGetValue", str(8)]).decode("utf-8")
     semadata['System_Temp'] = check_output(["./semaeapi_tool", "-a", "SemaEApiBoardGetValue", str(10)]).decode("utf-8")
@@ -52,14 +55,8 @@ semadata = {'Board_Name':'',
 
 msg = get_info(semadata)
 
-
 while True:
     time.sleep(1)
     msg = get_realtime_info(msg)
     msg_json = json.dumps(msg)
-    MQTT_pub(topic, msg_json)
-
-
-
-
-
+    mqtt_pub(topic, msg_json)
